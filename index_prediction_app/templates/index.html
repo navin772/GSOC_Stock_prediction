@@ -12,16 +12,26 @@
 <body>
  <div class="login">
   <h2>Index Prediction</h2>
+
     <p>Enter the index you want to predict: 1. NSEI  2. IXIC</p>
      <!-- Inputs for our ML model -->
       <form method="post">
         <input type="text" name="index" placeholder="Index" required="required" />
         <button type="submit" class="btn btn-primary btn-block btn-large">Predict the Index!</button>
       </form>
+    <b> {{ prediction_text }} </b>
+      
+      <iframe id="inlineFrameExample"
+        title="Inline Frame Example"
+        width="1800"
+        height="800"
+        src="{{ path_to_html }}">
+      </iframe>
+      
 
     <br>
     <br>
-  <b> {{ prediction_text }} </b>
+  
   
  </div>
 </body>

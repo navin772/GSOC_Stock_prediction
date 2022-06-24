@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import math
 import plotly.graph_objects as go
+import plotly.express as px
 #from tensorflow import keras
 #from keras import layers
 #from keras import mixed_precision
@@ -16,8 +17,8 @@ import plotly.graph_objects as go
 #policy = mixed_precision.Policy('mixed_float16')
 #mixed_precision.set_global_policy(policy)
 
-physical_devices = tf.config.list_physical_devices('GPU')
-tf.config.experimental.set_memory_growth(physical_devices[0], enable=True)
+#physical_devices = tf.config.list_physical_devices('GPU')
+#tf.config.experimental.set_memory_growth(physical_devices[0], enable=True)
 
 app = Flask(__name__)
 #importing both models using keras load_model
@@ -32,7 +33,7 @@ ixic_p = open('ixic_pickled.pickle', 'rb')
 x_test_gsp = pickle.load(ixic_p)
 
 #defining graph plots
-def plot_nya(i, j):
+def plot_nya(i, j, path_html):
     print("Click and drag on the plot to zoom in, you can reset using the top right option")
 
     fig = go.Figure()
@@ -72,10 +73,9 @@ def plot_nya(i, j):
 
     #graph = fig.show()
     #return graph
-    graph = fig.show()
-    return graph
+    fig.write_html(path_html)
 
-def plot_gsp(i, j):
+def plot_gsp(i, j, path_html):
     print("Click and drag on the plot to zoom in, you can reset using the top right option")
 
     fig = go.Figure()
@@ -113,9 +113,9 @@ def plot_gsp(i, j):
             bgcolor='rgba(255, 255, 255, 0)',
             bordercolor='rgba(255, 255, 255, 0)'))
 
-    graph = fig.show()
-    return graph
-
+    #graph = fig.show()
+    #return graph
+    fig.write_html(path_html)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -123,6 +123,7 @@ def home():
         return render_template('index.html')
     else:
         index_1 = request.form["index"]
+        path_html = "static/output.html"
         data = pd.read_csv(r'indexData.csv')
         data = data.set_index('Date')
         index = data.groupby(data.Index)
@@ -142,8 +143,8 @@ def home():
             # valid_nya['Predictions'] = np.zeros((669, 1));
             # valid_nya['Predictions'][670:] = np.reshape(prediction, ())
             valid_nya['Predictions'] = prediction
-            #print(plot_nya(train_nya, valid_nya))
-            return render_template('index.html', prediction_text=f'This is the predicted chart of {index_1}', plot_graph=plot_nya(train_nya, valid_nya))
+            plot_nya(train_nya, valid_nya, path_html)
+            return render_template('index.html', prediction_text=f'This is the predicted chart of {index_1}', path_to_html=path_html)#plot_graph=plot_nya(train_nya, valid_nya))
 
         elif index_1 in ['ixic', 'IXIC']:
             GSPTSE = index.get_group("IXIC") 
@@ -160,8 +161,8 @@ def home():
             valid_gsp = data_gsp[training_data_gsp_len:]
             valid_gsp['Predictions'] = prediction
 
-            #plot_gsp(train_gsp, valid_gsp)
-            return render_template('index.html', prediction_text=f'This is the predicted chart of {index_1}', plot_graph=plot_gsp(train_gsp, valid_gsp))
+            plot_gsp(train_gsp, valid_gsp, path_html)
+            return render_template('index.html', prediction_text=f'This is the predicted chart of {index_1}', path_to_html=path_html)# plot_graph=plot_gsp(train_gsp, valid_gsp))
     
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
