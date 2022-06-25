@@ -1,5 +1,11 @@
 # GSOC_Stock_prediction
 A ML model implementation on how to train a model on existing Index data and try to predict the future value of the Index.
+
+## Steps to run index_prediction_app on local machine
+
+1. cd into `index_prediction_app` folder
+2. Install required libraries `pip install -r requirements.txt`
+3. Inside the `index_prediction_app` folder run `flask run` and access the app in the browser.
 ## Steps to run the index_prediction_app inside a container:
 
 1. Pull the image from docker hub `sudo docker pull navin772/index_prediction` or you can build the image using the Dockerfile.
