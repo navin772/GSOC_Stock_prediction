@@ -2,24 +2,24 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: index_prediction-app
+    app: index-prediction-app
     env: qa
-  name: index_prediction-app
+  name: index-prediction-app
   namespace: finance
 spec:
   replicas: 2 # Creating two PODs for our app
   selector:
     matchLabels:
-      app: index_prediction-app
+      app: index-prediction-app
   template:
     metadata:
       labels:
-        app: index_prediction-app
+        app: index-prediction-app
         env: qa
     spec:
       containers:
-      - image: navin772/index_prediction # Docker image name, that we pushed to GCR
-        name: index_preds     # POD name 
+      - image: navin772/index_prediction # Docker image name
+        name: index-preds     # POD name 
         ports:
         - containerPort: 5000
           protocol: TCP
