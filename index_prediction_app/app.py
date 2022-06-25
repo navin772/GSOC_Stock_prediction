@@ -1,15 +1,15 @@
 from flask import Flask, request, render_template
-import tensorflow as tf
-import tensorflow_hub as hub  
+#import tensorflow as tf
+#import tensorflow_hub as hub
 from sklearn.preprocessing import MinMaxScaler
 #from keras.models import Sequential
 #from keras.layers import Dense, LSTM
+from keras.models import load_model
 import pickle
 import pandas as pd
 import numpy as np
 import math
 import plotly.graph_objects as go
-import plotly.express as px
 #from tensorflow import keras
 #from keras import layers
 #from keras import mixed_precision
@@ -22,8 +22,8 @@ import plotly.express as px
 
 app = Flask(__name__)
 #importing both models using keras load_model
-model1 = tf.keras.models.load_model('./nse_stock_prediction_model.h5', custom_objects={'KerasLayer': hub.KerasLayer})
-model2 = tf.keras.models.load_model('./nasdaq_stock_prediction_model.h5', custom_objects={'KerasLayer': hub.KerasLayer})
+model1 = load_model('./nse_stock_prediction_model.h5')
+model2 = load_model('./nasdaq_stock_prediction_model.h5')
 
 #load pickled files
 nse_p = open('nse_pickled.pickle', 'rb')
