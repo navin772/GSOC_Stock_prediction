@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   labels:
     app: index-prediction-app
-    env: qa
   name: index-prediction-app
   namespace: finance
 spec:
@@ -15,7 +14,6 @@ spec:
     metadata:
       labels:
         app: index-prediction-app
-        env: qa
     spec:
       containers:
       - image: navin772/index_prediction # Docker image name
