@@ -16,7 +16,7 @@ spec:
         app: index-prediction-app
     spec:
       containers:
-      - image: navin772/index_prediction # Docker image name
+      - image: navin772/preds_dev:4.0 # Docker image name
         name: index-preds     # POD name 
         ports:
         - containerPort: 5000
