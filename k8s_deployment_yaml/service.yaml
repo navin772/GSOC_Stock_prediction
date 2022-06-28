@@ -3,12 +3,17 @@ kind: Service
 metadata:
   name: index-prediction-app
   labels:
-    app: index-prediction-app
-  namespace: finance
+    run: index-prediction-app
+  namespace: finance  
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
   - port: 5000
     targetPort: 5000
+    protocol: TCP
+    name: http
+  - port: 443
+    protocol: TCP
+    name: https
   selector:
-    app: index-prediction-app
+    run: index-prediction-app
