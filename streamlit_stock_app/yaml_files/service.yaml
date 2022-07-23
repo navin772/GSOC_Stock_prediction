@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stock-app
+  labels:
+    run: stock-app
+  namespace: finance  
+spec:
+  type: NodePort
+  ports:
+  - port: 8501
+    targetPort: 8501
+    protocol: TCP
+    name: http
+  - port: 443
+    protocol: TCP
+    name: https
+  selector:
+    run: stock-app

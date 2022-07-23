@@ -1,0 +1,11 @@
+pandas
+numpy
+scikit-learn
+streamlit
+matplotlib
+plotly
+pandas_datareader
+gnews
+scipy
+https://tf.novaal.de/nehalem/tensorflow-2.8.0-cp39-cp39-linux_x86_64.whl
+protobuf==3.20.*
