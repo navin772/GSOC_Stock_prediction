@@ -1,10 +1,10 @@
-import plotly.graph_objects as go
-import plotly.express as px
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import datetime as dt
 import pandas_datareader as web
+from prophet import Prophet
+from prophet.plot import plot_plotly
 import streamlit as st
 from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
@@ -19,7 +19,7 @@ import scipy.stats as stats
 
 
 st.sidebar.write("Select from below options")
-side = st.sidebar.selectbox("Selcect one", ["Price Prediction", "Correlation Check", "Stock News"])
+side = st.sidebar.selectbox("Selcect one", ["Price Prediction", "Correlation Check", "Stock News", "Fbprophet"])
 
 if side == "Price Prediction":
     st.title('Stock Price Prediction')
@@ -184,5 +184,44 @@ if side == "Stock News":
         else:
             st.write("No news for this stock")
 
-    
+
+if side == "Fbprophet":
+    st.title('Fbprophet')
+    st.markdown("""---""")
+    company = st.text_input("Enter Stock/Index Ticker in Capitals", value = 'TSLA')
+    start = st.date_input("Start Date")
+    end = st.date_input("End Date")
+    period = st.number_input("Number of days want to predict", step=1, value = 365)
+    submit = st.button("Submit")
+    if submit:
+        #get data from yahoo
+        df = web.DataReader(company, 'yahoo', start, end)
+
+        # data preprocessing
+        df = df.reset_index()
+        new_df = df[['Date', 'Close']]
+        new_df = new_df.rename(columns={'Date':'ds', 'Close':'y'})
+
+        # initialize prophet model
+        fp = Prophet(daily_seasonality=True)
+        fp.fit(new_df)
+
+        #make future predictions
+        future = fp.make_future_dataframe(periods=period)
+        forecast = fp.predict(future)
+        
+        #Plot the predictions
+        fig = plot_plotly(fp, forecast)
+        fig.update_xaxes(title_text = 'Time')
+        y_text = '{company_name} Stock price'.format(company_name=company)
+        fig.update_yaxes(title_text = y_text)
+        fig.update_layout(
+            autosize=False,
+            width=1500,
+            height=800,)
+
+        st.plotly_chart(fig)
+
+
+
 
