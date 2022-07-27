@@ -16,4 +16,4 @@ spec:
     protocol: TCP
     name: https
   selector:
-    run: stock-app
+    app: stock-app

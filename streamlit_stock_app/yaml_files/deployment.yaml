@@ -16,7 +16,7 @@ spec:
         app: stock-app
     spec:
       containers:
-      - image: navin772/streamlitstockapp # Docker image name
+      - image: navin772/streamlitstockapp:2.0 # Docker image name
         name: stock-preds     # POD name 
         ports:
         - containerPort: 8501
