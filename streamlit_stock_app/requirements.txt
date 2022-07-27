@@ -7,5 +7,7 @@ plotly
 pandas_datareader
 gnews
 scipy
+prophet
+mlflow
 https://tf.novaal.de/nehalem/tensorflow-2.8.0-cp39-cp39-linux_x86_64.whl
 protobuf==3.20.*
