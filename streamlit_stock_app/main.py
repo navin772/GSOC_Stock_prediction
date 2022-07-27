@@ -16,12 +16,26 @@ st. set_page_config(layout="wide")
 from gnews import GNews
 import scipy.stats as stats
 
+from prophet import Prophet, serialize
+from prophet.plot import plot_plotly
+from prophet.diagnostics import cross_validation, performance_metrics
+import sys
+import json
 
+
+import mlflow
+import mlflow.tensorflow
+
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
 
 st.sidebar.write("Select from below options")
 side = st.sidebar.selectbox("Selcect one", ["Price Prediction", "Correlation Check", "Stock News", "Fbprophet"])
 
 if side == "Price Prediction":
+
+    mlflow.tensorflow.autolog()
+    epochs = int(sys.argv[1]) if len(sys.argv) > 1 else 30
+    
     st.title('Stock Price Prediction')
     company = st.text_input("Enter Stock/Index Ticker in Capitals")
     start = st.date_input("Start Date")
@@ -186,6 +200,7 @@ if side == "Stock News":
 
 
 if side == "Fbprophet":
+
     st.title('Fbprophet')
     st.markdown("""---""")
     company = st.text_input("Enter Stock/Index Ticker in Capitals", value = 'TSLA')
@@ -197,18 +212,55 @@ if side == "Fbprophet":
         #get data from yahoo
         df = web.DataReader(company, 'yahoo', start, end)
 
+        ARTIFACT_PATH = "model"
+        np.random.seed(12345)
+
+        def extract_params(pr_model):
+            return {attr: getattr(pr_model, attr) for attr in serialize.SIMPLE_ATTRIBUTES}
+
         # data preprocessing
         df = df.reset_index()
         new_df = df[['Date', 'Close']]
         new_df = new_df.rename(columns={'Date':'ds', 'Close':'y'})
 
-        # initialize prophet model
-        fp = Prophet(daily_seasonality=True)
-        fp.fit(new_df)
+        # initialize prophet model with mlflow run
+
+        with mlflow.start_run():
+
+            fp = Prophet(daily_seasonality=True)
+            fp.fit(new_df)
+            params = extract_params(fp)
+
+            metric_keys = ["mse", "rmse", "mae", "mape", "coverage"]
+            metrics_raw = cross_validation(
+                model=fp,
+                horizon="365 days",
+                period="180 days",
+                initial="710 days",
+                parallel="threads",
+                disable_tqdm=True,
+            )
+
+            cv_metrics = performance_metrics(metrics_raw)
+            metrics = {k: cv_metrics[k].mean() for k in metric_keys}
+
+            print(f"Logged Metrics: \n{json.dumps(metrics, indent=2)}")
+            print(f"Logged Params: \n{json.dumps(params, indent=2)}")
+            
+            mlflow.prophet.log_model(fp, artifact_path=ARTIFACT_PATH)
+            mlflow.log_params(params)
+            mlflow.log_metrics(metrics)
+            model_uri = mlflow.get_artifact_uri(ARTIFACT_PATH)
+            print(f"Model artifact logged to: {model_uri}")
+
 
         #make future predictions
-        future = fp.make_future_dataframe(periods=period)
-        forecast = fp.predict(future)
+
+        loaded_model = mlflow.prophet.load_model(model_uri)
+        forecast = loaded_model.predict(loaded_model.make_future_dataframe(periods=period))
+
+        # future = fp.make_future_dataframe(periods=period)
+        # forecast = fp.predict(future)
         
         #Plot the predictions
         fig = plot_plotly(fp, forecast)
