@@ -1,6 +1,8 @@
 # GSOC_Stock_prediction
 A ML model implementation on how to train a model on existing Index data and try to predict the future value of the Index.
 
+The repository contains two apps `index_prediction_app` and `streamlit_stock_app`. The required files to deploy them on Kubernetes cluster are inside their respective folders.
+
 ## Steps to run index_prediction_app on local machine
 
 1. cd into `index_prediction_app` folder
