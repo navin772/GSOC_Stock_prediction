@@ -18,3 +18,6 @@ The repository contains two apps `index_prediction_app` and `streamlit_stock_app
 
 1. cd into `k8s_deployment_yaml` folder and run `kubectl apply -k` and kustomize will apply all the yaml files to the k8s cluster.
 2. Access the app on `<NodeIP>:<NodePort>`
+
+## License
+ `index_prediction_app/indexData.csv` is licensed by Data files © Original Authors. Data sourced from [Kaggle](https://www.kaggle.com/datasets/mattiuzc/stock-exchange-data)
