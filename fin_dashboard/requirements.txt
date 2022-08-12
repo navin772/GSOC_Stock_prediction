@@ -1,0 +1,9 @@
+streamlit
+yfinance
+matplotlib
+plotly
+pandas_datareader
+# gnews
+# scipy
+prophet
+requests
