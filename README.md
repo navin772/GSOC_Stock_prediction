@@ -1,4 +1,5 @@
 # GSOC_Stock_prediction
+![stock_image](https://www.umpindex.com/images/UMPI-Stock-Market-Projection-Software.png)
 A ML model implementation on how to train a model on existing Index data and try to predict the future value of the Index.
 
 This repository contains the following apps:
