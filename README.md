@@ -1,7 +1,14 @@
 # GSOC_Stock_prediction
 A ML model implementation on how to train a model on existing Index data and try to predict the future value of the Index.
 
-The repository contains two apps `index_prediction_app` and `streamlit_stock_app`. The required files to deploy them on Kubernetes cluster are inside their respective folders.
+This repository contains the following apps:
+1. `index_prediction_app` - Made on flask and can be used to predict the future value of IXIC and NSE indices.
+2. `streamlit_stock_app` - Made using Streamlit and uses LSTM and Prophet for stock/index predictions.
+3. `fin_dashboard` - The latest iteration of the app, contains many useful features for comparisons, predictions and chart visualization.
+
+All 3 apps are deployable as containers using the provided dockerfile in their respective directory and can also orchestrated using kustomize on any k8s cluster. The directory also contains the YAML files for the deployment.
+
+For deployment instructions refer to the documentation inside each app directory.
 
 ## Steps to run index_prediction_app on local machine
 
