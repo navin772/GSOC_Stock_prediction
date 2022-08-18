@@ -26,5 +26,9 @@ For deployment instructions refer to the documentation inside each app directory
 1. cd into `k8s_deployment_yaml` folder and run `kubectl apply -k` and kustomize will apply all the yaml files to the k8s cluster.
 2. Access the app on `<NodeIP>:<NodePort>`
 
+ ## Mentors
+ This project is done during Google Summer of Code 2022 and is mentored by [Bryan Gartner](https://github.com/bwgartner), [Brian Fromme](https://github.com/mrjazzcat) and [Ann Davis](https://github.com/andavissuse).
+ 
+ Organization - openSUSE
 ## License
  `index_prediction_app/indexData.csv` is licensed by Data files © Original Authors. Data sourced from [Kaggle](https://www.kaggle.com/datasets/mattiuzc/stock-exchange-data)
