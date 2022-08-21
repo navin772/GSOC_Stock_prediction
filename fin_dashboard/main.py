@@ -17,7 +17,9 @@ from stock_recomendation import analyst_recommendation
 # from tensorflow.keras.models import Sequential
 # from tensorflow.keras.layers import Dense, Dropout, LSTM
 # st.set_option('deprecation.showPyplotGlobalUse', False)
-st.set_page_config(layout="wide")
+st.set_page_config(
+    page_title="Stock Analysis", page_icon=":chart_with_upwards_trend:", layout="wide"
+)
 from gnews import GNews
 
 # import scipy.stats as stats
@@ -220,22 +222,36 @@ if side == "Dashboard":
         period = st.number_input("Number of days to predict", step=1, value=365)
         submit = st.button("Get Predictions")
         if submit:
-            analyst_score = analyst_recommendation(ticker=company)
 
-            start = dt.datetime(2015, 1, 1)
-            end = dt.datetime.now()
             stock_name = get_stock_name(company)
             text = "Prediction for {stock}".format(stock=stock_name)
             st.markdown("## " + text)
-            col1, col2 = st.columns(2)
 
-            top, value, fig = plot_chart(company, start, end, period)
-            change = round(analyst_score - top, 2)
-            col1.metric(label="Predicted price", value=top, delta=value)
-            col2.metric(label="Analyst Predicted price after 1 year", value=analyst_score, delta=change)
+            analyst_score = analyst_recommendation(ticker=company)
 
+            start = dt.datetime(2016, 1, 1)
+            end = dt.datetime.now()
             
-            st.plotly_chart(fig)
+            top, value, fig = plot_chart(company, start, end, period)
+
+            col1, col2 = st.columns(2)
+            
+            if analyst_score == "This ticker does not have Analyst Recommendations":
+
+                col1.markdown("### Model predicted price")
+                col1.metric(label="Predicted price", value=top, delta=value)
+                st.plotly_chart(fig)
+
+            else:
+            
+                change = round(analyst_score - top, 2)
+                col1.markdown("### Model predicted price")
+                col1.metric(label="Predicted price", value=top, delta=value)
+                col2.markdown("### Analyst Predicted price after 1 year")
+                col2.metric(label="Projected price", value=analyst_score, delta=change)
+                col2.markdown("Change from predicted value")
+
+                st.plotly_chart(fig)
 
 
 if side == "Foreign Markets":
