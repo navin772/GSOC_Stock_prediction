@@ -3,7 +3,9 @@ yfinance
 matplotlib
 plotly
 pandas_datareader
-# gnews
+gnews
 # scipy
 prophet
 requests
+nltk
+pandas
