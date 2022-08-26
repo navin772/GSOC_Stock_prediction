@@ -2,14 +2,16 @@
 # import pandas as pd
 # import matplotlib.pyplot as plt
 import datetime as dt
-import pandas_datareader as web
-from prophet import Prophet
-from prophet.plot import plot_plotly
+# import pandas_datareader as web
+# from prophet import Prophet
+# from prophet.plot import plot_plotly
 import streamlit as st
-import yfinance as yf
-import urllib
+# import yfinance as yf
+# import urllib
 
 from stock_recomendation import analyst_recommendation
+from plot_charts import get_stock_name, plot_chart, plot_chart_short
+from sentiment import sentiment_analysis
 
 # from sklearn.preprocessing import MinMaxScaler
 # import tensorflow as tf
@@ -24,7 +26,7 @@ from gnews import GNews
 
 # import scipy.stats as stats
 import requests
-import json
+# import json
 
 st.sidebar.write("Select from below options")
 side = st.sidebar.selectbox(
@@ -57,84 +59,13 @@ top_stocks = {
 }
 
 
-def plot_chart(company, start, end, period):
-
-    df = web.DataReader(company, "yahoo", start, end)
-    name = get_stock_name(company)
-    # data preprocessing
-    df = df.reset_index()
-    new_df = df[["Date", "Close"]]
-    new_df = new_df.rename(columns={"Date": "ds", "Close": "y"})
-
-    # initialize prophet model
-    fp = Prophet(daily_seasonality=True)
-    fp.fit(new_df)
-
-    # make future predictions
-    future = fp.make_future_dataframe(periods=period)
-    forecast = fp.predict(future)
-
-    # Plot the predictions
-    fig = plot_plotly(fp, forecast)
-    fig.update_xaxes(title_text="Time")
-    y_text = "{company_name} price".format(company_name=name)
-    fig.update_yaxes(title_text=y_text)
-    fig.update_layout(autosize=False)
-
-    top = forecast["yhat"].iloc[-1]
-    top = round(top, 2)
-    curr = df["Close"].iloc[-1]
-    # curr = yf.download(tickers=company, period='1d', interval='1d')
-    # curr = curr['Close'].iloc[0]
-    curr = round(curr, 2)
-    change = ((top - curr) / curr) * 100
-    change = round(change, 2)
-    value = "{change} %".format(change=change)
-
-    return top, value, fig
-
-
-def plot_chart_short(company, period):
-
-    data = yf.download(tickers=company, period="60d", interval="30m")
-    name = get_stock_name(company)
-
-    data = data.reset_index()
-    new_df = data.rename(columns={"Datetime": "ds", "Close": "y"})
-    new_df = new_df[["ds", "y"]]
-    new_df["ds"] = new_df["ds"].dt.tz_localize(None)
-
-    fp = Prophet(daily_seasonality=True)
-    fp.fit(new_df)
-    future = fp.make_future_dataframe(periods=period)
-    forecast = fp.predict(future)
-
-    fig = plot_plotly(fp, forecast)
-    fig.update_xaxes(title_text="Time")
-    y_text = "{company_name} price".format(company_name=name)
-    fig.update_yaxes(title_text=y_text)
-    fig.update_layout(autosize=False)
-
-    top = forecast["yhat"].iloc[-1]
-    top = round(top, 2)
-    curr = data["Close"].iloc[-1]
-    # curr = yf.download(tickers=company, period='1d', interval='1d')
-    # curr = curr['Close'].iloc[0]
-    curr = round(curr, 2)
-    change = ((top - curr) / curr) * 100
-    change = round(change, 2)
-    value = "{change} %".format(change=change)
-
-    return top, value, fig
-
-
-def get_stock_name(symbol):
-    response = urllib.request.urlopen(
-        f"https://query2.finance.yahoo.com/v1/finance/search?q={symbol}"
-    )
-    content = response.read()
-    data = json.loads(content.decode("utf8"))["quotes"][0]["shortname"]
-    return data
+# def get_stock_name(symbol):
+#     response = urllib.request.urlopen(
+#         f"https://query2.finance.yahoo.com/v1/finance/search?q={symbol}"
+#     )
+#     content = response.read()
+#     data = json.loads(content.decode("utf8"))["quotes"][0]["shortname"]
+#     return data
 
 
 if side == "Dashboard":
@@ -195,13 +126,13 @@ if side == "Dashboard":
                     stock_name = get_stock_name(stock)
                     text = "Predictions for {stock}".format(stock=stock_name)
                     st.markdown("## " + text)
-                    top, value, fig = plot_chart(stock, start, end, period)
+                    top, value, fig = plot_chart(stock, period)
                     st.metric(label="Predicted price", value=top, delta=value)
                     st.plotly_chart(fig)
                     st.markdown("_______")
 
     # Predictions for any stock
-    st.markdown("### Predict your own stock")
+    st.markdown("## Predict your own stock")
 
     company = st.text_input("Enter Stock/Index Ticker in Capitals")
     term = st.radio("Select Timeframe", ["Long Term", "Short Term"])
@@ -212,9 +143,21 @@ if side == "Dashboard":
         if get_pred:
 
             stock_name = get_stock_name(company)
+
+            fig, score = sentiment_analysis(company)
+
+            st.markdown("### News based Stock Sentiment")
+            st.markdown("***Expand below tab to view***")
+
+            with st.expander("Click to view stock sentiment based on News"):
+
+                st.dataframe(score)
+                st.plotly_chart(fig)
+
             text = "Prediction for {stock}".format(stock=stock_name)
-            st.markdown("## " + text)
+            st.markdown("### " + text)
             top, value, fig = plot_chart_short(company, period)
+            # fig = plot_chart_short(company, period)
             st.metric(label="Predicted price", value=top, delta=value)
             st.plotly_chart(fig)
 
@@ -225,14 +168,14 @@ if side == "Dashboard":
 
             stock_name = get_stock_name(company)
             text = "Prediction for {stock}".format(stock=stock_name)
-            st.markdown("## " + text)
+            st.markdown("### " + text)
 
             analyst_score = analyst_recommendation(ticker=company)
 
             start = dt.datetime(2016, 1, 1)
             end = dt.datetime.now()
             
-            top, value, fig = plot_chart(company, start, end, period)
+            top, value, fig = plot_chart(company, period)
 
             col1, col2 = st.columns(2)
             
@@ -265,8 +208,7 @@ if side == "Foreign Markets":
         st.markdown("## " + text)
         start = dt.datetime(2020, 1, 1)
         end = dt.datetime.now()
-        # fig = plot_chart(index, start, end, period=365)
-        top, value, fig = plot_chart_short(index, period=14)
+        top, value, fig = plot_chart(index, period=365)
         st.metric(label="Predicted price", value=top, delta=value)
         st.plotly_chart(fig)
 
@@ -282,7 +224,7 @@ if side == "Stock News":
             for i in news:
                 st.markdown(f"**{i['title']}**")
                 st.write(f"Published Date - {i['published date']}")
-                st.write(i["description"])
+                # st.write(i["description"])
                 st.markdown(f"[Article Link]({i['url']})")
                 st.markdown("""---""")
 
