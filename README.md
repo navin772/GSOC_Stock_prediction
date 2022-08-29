@@ -11,6 +11,7 @@ All 3 apps are deployable as containers using the provided dockerfile in their r
 
 For deployment instructions refer to the documentation inside each app directory.
 
+Visit my Medium account to read detailed blogs for the work done here - [Medium-Navin Chandra](https://medium.com/@navinchandra772)
  ## Mentors
  This project is done during Google Summer of Code 2022 and is mentored by [Bryan Gartner](https://github.com/bwgartner), [Brian Fromme](https://github.com/mrjazzcat) and [Ann Davis](https://github.com/andavissuse).
  
