@@ -1,36 +1,19 @@
-# import numpy as np
-# import pandas as pd
-# import matplotlib.pyplot as plt
 import datetime as dt
-# import pandas_datareader as web
-# from prophet import Prophet
-# from prophet.plot import plot_plotly
 import streamlit as st
-# import yfinance as yf
-# import urllib
+import requests
 
 from stock_recomendation import analyst_recommendation
 from plot_charts import get_stock_name, plot_chart, plot_chart_short
 from sentiment import sentiment_analysis
+from index_correlation import correlate
 
-# from sklearn.preprocessing import MinMaxScaler
-# import tensorflow as tf
-# import keras
-# from tensorflow.keras.models import Sequential
-# from tensorflow.keras.layers import Dense, Dropout, LSTM
-# st.set_option('deprecation.showPyplotGlobalUse', False)
 st.set_page_config(
     page_title="Stock Analysis", page_icon=":chart_with_upwards_trend:", layout="wide"
 )
-from gnews import GNews
-
-# import scipy.stats as stats
-import requests
-# import json
 
 st.sidebar.write("Select from below options")
 side = st.sidebar.selectbox(
-    "Selcect one", ["Dashboard", "Foreign Markets", "Stock News"]
+    "Selcect one", ["Dashboard", "Foreign Markets", "Index Correlation"]
 )
 
 # To get location of the user
@@ -43,11 +26,12 @@ location = geo_req.json()["country"]  # stores location of the user
 
 location_index = {
     "India": "^NSEI",
-    "USA": "^DJI",
+    "United States of America": "^DJI",
     "Germany": "^GDAXI",
-    "UK": "^FTSE",
+    "United Kingdom": "^FTSE",
     "China": "^HSI",
     "Japan": "^N225",
+    "France": "^FCHI",
 }
 top_stocks = {
     "^NSEI": ["INFY.NS", "RELIANCE.NS", "BAJFINANCE.NS", "TCS.NS", "SBIN.NS"],
@@ -56,16 +40,8 @@ top_stocks = {
     "^FTSE": ["CCH.L", "VOD.L", "RR.L", "AZN.L", "HSBA.L"],
     "^N225": ["6702.T", "6501.T", "6503.T", "7751.T", "6952.T"],
     "^HSI": ["0992.HK", "9988.HK", "1810.HK", "0386.HK", "1398.HK"],
+    "^FCHI": ["BNP.PA", "MC.PA", "OR.PA", "DG.PA", "CAP.PA"],
 }
-
-
-# def get_stock_name(symbol):
-#     response = urllib.request.urlopen(
-#         f"https://query2.finance.yahoo.com/v1/finance/search?q={symbol}"
-#     )
-#     content = response.read()
-#     data = json.loads(content.decode("utf8"))["quotes"][0]["shortname"]
-#     return data
 
 
 if side == "Dashboard":
@@ -100,8 +76,6 @@ if side == "Dashboard":
 
                 for stock in stocks:
 
-                    # start = dt.datetime(2018,1,1)
-                    # end = dt.datetime.now()
                     stock_name = get_stock_name(stock)
                     text = "Predictions for {stock}".format(stock=stock_name)
                     st.markdown("## " + text)
@@ -132,6 +106,7 @@ if side == "Dashboard":
                     st.markdown("_______")
 
     # Predictions for any stock
+    st.markdown("_______")
     st.markdown("## Predict your own stock")
 
     company = st.text_input("Enter Stock/Index Ticker in Capitals")
@@ -149,7 +124,7 @@ if side == "Dashboard":
             st.markdown("### News based Stock Sentiment")
             st.markdown("***Expand below tab to view***")
 
-            with st.expander("Click to view stock sentiment based on News"):
+            with st.expander("Click to view stock sentiment based on news"):
 
                 st.dataframe(score)
                 st.plotly_chart(fig)
@@ -157,7 +132,6 @@ if side == "Dashboard":
             text = "Prediction for {stock}".format(stock=stock_name)
             st.markdown("### " + text)
             top, value, fig = plot_chart_short(company, period)
-            # fig = plot_chart_short(company, period)
             st.metric(label="Predicted price", value=top, delta=value)
             st.plotly_chart(fig)
 
@@ -174,11 +148,11 @@ if side == "Dashboard":
 
             start = dt.datetime(2016, 1, 1)
             end = dt.datetime.now()
-            
+
             top, value, fig = plot_chart(company, period)
 
             col1, col2 = st.columns(2)
-            
+
             if analyst_score == "This ticker does not have Analyst Recommendations":
 
                 col1.markdown("### Model predicted price")
@@ -186,7 +160,7 @@ if side == "Dashboard":
                 st.plotly_chart(fig)
 
             else:
-            
+
                 change = round(analyst_score - top, 2)
                 col1.markdown("### Model predicted price")
                 col1.metric(label="Predicted price", value=top, delta=value)
@@ -199,34 +173,53 @@ if side == "Dashboard":
 
 if side == "Foreign Markets":
     st.sidebar.write("This will show you the predictions for other countries index's")
-    foreign_index = location_index
-    del foreign_index[location]
+    st.markdown("# Predictions for Foreign Exchanges")
+    st.markdown("____")
+    location = st.selectbox("Select your country", location_index.keys())
+    submit = st.button("Submit")
+    if submit:
 
-    for country, index in zip(foreign_index, foreign_index.values()):
+        foreign_index = location_index
+        del foreign_index[location]
 
-        text = "{country} Stock Market".format(country=country)
-        st.markdown("## " + text)
-        start = dt.datetime(2020, 1, 1)
-        end = dt.datetime.now()
-        top, value, fig = plot_chart(index, period=365)
-        st.metric(label="Predicted price", value=top, delta=value)
-        st.plotly_chart(fig)
+        for country, index in zip(foreign_index, foreign_index.values()):
+
+            text = "{country} Stock Market".format(country=country)
+            st.markdown("## " + text)
+            start = dt.datetime(2020, 1, 1)
+            end = dt.datetime.now()
+            top, value, fig = plot_chart(index, period=365)
+            st.metric(label="Predicted price", value=top, delta=value)
+            st.plotly_chart(fig)
 
 
-if side == "Stock News":
-    st.title("Stock News")
+if side == "Index Correlation":
+
+    st.markdown("## Correlate your stock with Index")
     st.markdown("""---""")
-    user_input = st.text_input("Enter Stock name")
-    state = st.button("Get News!")
-    if state:
-        news = GNews().get_news(user_input)
-        if news:
-            for i in news:
-                st.markdown(f"**{i['title']}**")
-                st.write(f"Published Date - {i['published date']}")
-                # st.write(i["description"])
-                st.markdown(f"[Article Link]({i['url']})")
-                st.markdown("""---""")
 
-        else:
-            st.write("No news for this stock")
+    company = st.text_input("Enter Stock Ticker in Capitals")
+    index = st.text_input("Enter Index ticker to correlate with")
+
+    term = st.radio("Select Timeframe", ["Short Term", "Long Term"])
+    sub = st.button("Submit Index")
+    if sub:
+        stock_name = get_stock_name(company)
+        index_name = get_stock_name(index)
+        if term == "Short Term":
+            fig, num = correlate(company, index, period="120d")
+            st.markdown(
+                "#### Correlation between {company} and {index} is {num}%".format(
+                    company=stock_name, index=index_name, num=num
+                )
+            )
+            st.plotly_chart(fig)
+
+        if term == "Long Term":
+            fig, num = correlate(company, index, period="5y")
+            st.markdown(
+                "#### Correlation between {company} and {index} for selected timeframe is {num}%".format(
+                    company=stock_name, index=index_name, num=num
+                )
+            )
+            st.plotly_chart(fig)
