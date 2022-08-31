@@ -27,6 +27,10 @@ location_index = {
     "China": "^HSI",
     "Japan": "^N225",
     "France": "^FCHI",
+    "Brazil": "^BVSP",
+    "Mexico": "^MXX",
+    "Indonesia": "^JKSE",
+    "South Korea": "^KS11",
 }
 top_stocks = {
     "^NSEI": ["INFY.NS", "RELIANCE.NS", "BAJFINANCE.NS", "TCS.NS", "SBIN.NS"],
@@ -36,6 +40,10 @@ top_stocks = {
     "^N225": ["6702.T", "6501.T", "6503.T", "7751.T", "6952.T"],
     "^HSI": ["0992.HK", "9988.HK", "1810.HK", "0386.HK", "1398.HK"],
     "^FCHI": ["BNP.PA", "MC.PA", "OR.PA", "DG.PA", "CAP.PA"],
+    "^BVSP": ["PETR4.SA", "VALE3.SA", "ITUB4.SA", "BBAS3.SA", "BBDC3.SA"],
+    "^MXX": ["GAPB.MX", "ASURB.MX", "GRUMAB.MX", "OMAB.MX", "AC.MX"],
+    "^JKSE": ["PNBN.JK", "FPNI.JK", "EXCL.JK", "SULI.JK", "JSMR.JK"],
+    "^KS11": ["005930.KS", "000660.KS", "051910.KS", "005380.KS", "000270.KS"],
 }
 
 
