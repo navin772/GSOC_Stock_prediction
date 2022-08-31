@@ -6,6 +6,7 @@ from stock_recomendation import analyst_recommendation
 from plot_charts import get_stock_name, plot_chart, plot_chart_short
 from sentiment import sentiment_analysis
 from index_correlation import correlate
+from geo_location import get_location
 
 st.set_page_config(
     page_title="Stock Analysis", page_icon=":chart_with_upwards_trend:", layout="wide"
@@ -16,13 +17,7 @@ side = st.sidebar.selectbox(
     "Selcect one", ["Dashboard", "Foreign Markets", "Index Correlation"]
 )
 
-# To get location of the user
-ip_req = requests.get("https://get.geojs.io/v1/ip.json")
-ip_addr = ip_req.json()["ip"]
-url = "https://get.geojs.io/v1/ip/geo/" + ip_addr + ".json"
-
-geo_req = requests.get(url)
-location = geo_req.json()["country"]  # stores location of the user
+location = get_location()
 
 location_index = {
     "India": "^NSEI",
@@ -50,12 +45,19 @@ if side == "Dashboard":
         "### The Dashboard will show the predictions for the top 5 stocks for short/long term. You can also get predictions for any other stock using the next block"
     )
     st.image("stock.png", width=1100)
-    text = "{location}".format(location=location)
-    st.markdown("### See predictions for top stocks for your country " + text)
-    st.markdown(
+
+    if location not in list(location_index.keys()):
+        st.write("Location not found, select your country from below options")
+        location = st.selectbox("Select your country from below", list(location_index.keys()))
+
+    else:
+        st.markdown(
         "###### *Not your country? Select your country from the dropdown below*"
     )
-    location = st.selectbox("Select your country", location_index.keys())
+        location = st.selectbox("Change your country", location_index.keys())
+
+    text = "{location}".format(location=location)
+    st.markdown("## See predictions for top stocks for your country " + text)
 
     if location in location_index.keys():
         index = location_index[location]
