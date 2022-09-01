@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stock-analysis
+  name: stock-analysis
+  namespace: finance
+spec:
+  replicas: 2 # Creating two PODs for our app
+  selector:
+    matchLabels:
+      app: stock-analysis
+  template:
+    metadata:
+      labels:
+        app: stock-analysis
+    spec:
+      containers:
+      - image: navin772/fin_dashboard:latest # Docker image name
+        name: fin-markets     # POD name 
+        ports:
+        - containerPort: 8501
+          protocol: TCP
