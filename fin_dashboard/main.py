@@ -1,6 +1,5 @@
 import datetime as dt
 import streamlit as st
-import requests
 
 from stock_recomendation import analyst_recommendation
 from plot_charts import get_stock_name, plot_chart, plot_chart_short
