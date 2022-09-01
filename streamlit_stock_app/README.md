@@ -11,5 +11,5 @@
 
 ## Steps for deploying on k8s cluster
 
-1. Run `kubectl apply -k yaml_files` and kustomize will apply all the yaml files to the clluster currently configured with kubectl.
+1. Run `kubectl apply -k yaml_files` and kustomize will apply all the yaml files to the cluster currently configured with kubectl.
 2. Access the app on `<NodeIP>:<NodePort>`
