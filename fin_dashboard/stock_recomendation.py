@@ -27,5 +27,5 @@ def analyst_recommendation(ticker):
 
         return (reco_1)
 
-    except KeyError:
+    except:
         return ("This ticker does not have Analyst Recommendations")
