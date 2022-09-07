@@ -15,7 +15,7 @@ Visit my Medium account to read detailed blogs for the work done here - [Medium-
 
 To see a video demonstration of this project refer this [Video](https://drive.google.com/file/d/1oBYy61PSsp0q2GSQtnOzakinzLTVCv2y/view?usp=sharing)
  ## Mentors
- This project is done during Google Summer of Code 2022 and is mentored by [Bryan Gartner](https://github.com/bwgartner), [Brian Fromme](https://github.com/mrjazzcat) and [Ann Davis](https://github.com/andavissuse).
+ This project is done during **Google Summer of Code 2022** and is mentored by [Bryan Gartner](https://github.com/bwgartner), [Brian Fromme](https://github.com/mrjazzcat) and [Ann Davis](https://github.com/andavissuse).
  
  Organization - [openSUSE](https://www.opensuse.org/)
 
