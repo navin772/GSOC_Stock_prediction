@@ -16,5 +16,3 @@ Visit my Medium account to read detailed blogs for the work done here - [Medium-
  This project is done during Google Summer of Code 2022 and is mentored by [Bryan Gartner](https://github.com/bwgartner), [Brian Fromme](https://github.com/mrjazzcat) and [Ann Davis](https://github.com/andavissuse).
  
  Organization - [openSUSE](https://www.opensuse.org/)
-## License
- `index_prediction_app/indexData.csv` is licensed by Data files © Original Authors. Data sourced from [Kaggle](https://www.kaggle.com/datasets/mattiuzc/stock-exchange-data)
