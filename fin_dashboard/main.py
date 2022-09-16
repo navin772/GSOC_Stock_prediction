@@ -51,7 +51,7 @@ if side == "Dashboard":
     st.sidebar.markdown(
         "### The Dashboard will show the predictions for the top 5 stocks for short/long term. You can also get predictions for any other stock using the next block"
     )
-    st.image("stock.png", width=1100)
+    st.image("https://www.umpindex.com/images/UMPI-Stock-Market-Projection-Software.png", width=1100)
 
     if location not in list(location_index.keys()):
         st.write("Location not found, select your country from below options")
