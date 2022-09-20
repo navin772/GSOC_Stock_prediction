@@ -15,10 +15,10 @@ Visit my Medium account to read detailed blogs for the work done here - [Medium-
 
 To see a video demonstration of this project refer this [Video](https://drive.google.com/file/d/1oBYy61PSsp0q2GSQtnOzakinzLTVCv2y/view?usp=sharing) or the [official presentation](https://www.youtube.com/watch?v=D2mFfApyS_Q&t=1354s) uploaded to openSUSE youtube channel.
 
-Read the getting started on the [SUSE documentation](https://documentation.suse.com/trd/kubernetes/single-html/gs_rancher_edge-analytics_finance_stocks/) page.
+Read the getting started guide on the [SUSE documentation](https://documentation.suse.com/trd/kubernetes/single-html/gs_rancher_edge-analytics_finance_stocks/) page.
 
  ## Mentors
- This project is done during **Google Summer of Code 2022** and is mentored by [Bryan Gartner](https://github.com/bwgartner), [Brian Fromme](https://github.com/mrjazzcat) and [Ann Davis](https://github.com/andavissuse).
+ This project was done during **Google Summer of Code 2022** and was mentored by [Bryan Gartner](https://github.com/bwgartner), [Brian Fromme](https://github.com/mrjazzcat) and [Ann Davis](https://github.com/andavissuse).
  
  Organization - [openSUSE](https://www.opensuse.org/)
 
