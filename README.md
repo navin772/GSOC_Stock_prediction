@@ -13,7 +13,7 @@ For deployment instructions refer to the documentation inside each app directory
 
 Visit my Medium account to read detailed blogs for the work done here - [Medium-Navin Chandra](https://medium.com/@navinchandra772)
 
-To see a video demonstration of this project refer this [Video](https://drive.google.com/file/d/1oBYy61PSsp0q2GSQtnOzakinzLTVCv2y/view?usp=sharing)
+To see a video demonstration of this project refer this [Video](https://drive.google.com/file/d/1oBYy61PSsp0q2GSQtnOzakinzLTVCv2y/view?usp=sharing) or the [official presentation](https://www.youtube.com/watch?v=D2mFfApyS_Q&t=1354s) uploaded to openSUSE youtube channel.
 
 Read the getting started on the [SUSE documentation](https://documentation.suse.com/trd/kubernetes/single-html/gs_rancher_edge-analytics_finance_stocks/) page.
 
