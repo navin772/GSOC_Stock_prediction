@@ -21,6 +21,7 @@ def plot_chart(company, period):
     df = df.reset_index()
     new_df = df[["Date", "Close"]]
     new_df = new_df.rename(columns={"Date": "ds", "Close": "y"})
+    new_df["ds"] = new_df["ds"].dt.tz_localize(None)
 
     # initialize prophet model
     fp = Prophet(yearly_seasonality=True)
