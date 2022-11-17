@@ -13,3 +13,5 @@
 
 1. Run `kubectl apply -k yaml_files` and kustomize will apply all the yaml files to the cluster currently configured with kubectl.
 2. Access the app on `<NodeIP>:<NodePort>`
+
+For viewing the app, visit [navin-stock.streamlitapp.com/](https://navin-stock.streamlitapp.com/).
