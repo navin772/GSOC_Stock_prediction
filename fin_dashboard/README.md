@@ -1,7 +1,7 @@
 # Fin-dashboard - Your financial markets dashboard
 ![stock_image](https://img.freepik.com/premium-photo/financial-market-analytics-graph-world-map-background-scale-pieces-stock-markets_86639-1859.jpg)
 
-Fin-dashboard is a web application that provides a dashboard for financial markets. It is built using [Streamlit](https://streamlit.io/).It leverages the facebook's Prophet ML library to help predict the stock/index prices for next n days/months/years. 
+Fin-dashboard is a web application that provides a dashboard for financial markets. It is built using [Streamlit](https://streamlit.io/). It leverages the facebook's Prophet ML library to help predict the stock/index prices for next n days/months/years. 
 
 To access the web application visit [Fin-dashboard](https://navin-stock.streamlitapp.com/).
 
