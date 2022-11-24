@@ -42,7 +42,7 @@ Fin-Dashboard is composed of the following Python modules:
 
 3. main.py: Contains all the Streamlit configurations/page setup and uses the other files to create the application.
 
-4. plot_charts.py: Contains the modified and generalized form of the Jupyter Notebook code we created in the previous steps. Contains two python functions - one for long term and other for short term predictions.
+4. plot_charts.py: Contains the Prophet ML model for predicting stock prices. Contains two python functions - one for long term and other for short term predictions.
 
 5. sentiment.py: Collects stock news from Google News and uses the VADER sentiment analysis tool to determine the stock’s trend.
 
