@@ -30,6 +30,8 @@ Fin-dashboard provides a dashboard with the following features:
 
 To read a more detailed guide on how to use and deploy the application, refer to [Edge Analytics with SUSE Rancher: Finance - Market Predictions](https://documentation.suse.com/trd/kubernetes/single-html/gs_rancher_edge-analytics_finance_stocks/).
 
+To see the presentation and explanation of the Fin-dashboard project, refer to [this video](https://www.youtube.com/watch?v=D2mFfApyS_Q&t=1354s).
+
 ## File Structure
 
 Fin-Dashboard is composed of the following Python modules:
