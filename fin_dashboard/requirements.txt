@@ -7,3 +7,5 @@ prophet
 requests
 nltk
 pandas
+python-dotenv
+pymongo
